@@ -5,7 +5,10 @@ logging.basicConfig(level=logging.INFO)
 
 
 class Api:
+    """Represents a simple web API."""
+
     def __init__(self):
+        """Initialise the API."""
         self.server_socket = socket.socket(
             socket.AF_INET,
             socket.SOCK_STREAM,
@@ -13,6 +16,7 @@ class Api:
         self.running = True
 
     def run(self, host: str, port: int):
+        """Start listening for connections."""
         self.server_socket.bind((host, port))
 
         logging.info(f"Listening on {host}:{port}")
