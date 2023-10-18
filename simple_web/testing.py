@@ -1,4 +1,5 @@
 from .api import Api
+from .methods import Method
 from .request import Request
 from .response import Response
 
@@ -13,7 +14,7 @@ class TestClient:
     def get(self, path: str, headers: dict[str, str] = {}) -> Response:
         """Run a GET request against the API."""
         request = Request(
-            method="GET",
+            method=Method.GET,
             path=path,
             headers=headers,
         )

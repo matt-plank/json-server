@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 
+from .methods import Method
+
 
 @dataclass
 class Request:
     """Represents a request to the API."""
 
-    method: str
+    method: Method
     path: str
     headers: dict[str, str]
 
@@ -28,7 +30,7 @@ def from_string(request_string: str) -> Request:
             raise ValueError(f"Invalid header line: {header_line!r}")
 
     return Request(
-        method=route_details[0],
+        method=Method(route_details[0]),
         path=route_details[1],
         headers=headers,
     )

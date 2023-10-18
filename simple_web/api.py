@@ -3,6 +3,7 @@ import socket
 
 from .request import Request, from_string
 from .response import Response
+from .router import RequestHandler, Router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -20,6 +21,8 @@ class Api:
             socket.SOCK_STREAM,
         )
         self.running = True
+
+        self.default_router = Router()
 
     def run(self, host: str, port: int):
         """Start listening for connections."""
@@ -48,8 +51,7 @@ class Api:
 
     def handle_request(self, request: Request) -> Response:
         """Handle a request."""
-        return Response(
-            status=200,
-            headers={},
-            body="Hello, World!",
-        )
+        handler: RequestHandler = self.default_router.find(request.path, request.method)
+        response: Response = handler(request)
+
+        return response
