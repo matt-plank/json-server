@@ -1,3 +1,5 @@
+[![Python Tests](https://github.com/matt-plank/json-server/actions/workflows/python-tests.yaml/badge.svg)](https://github.com/matt-plank/json-server/actions/workflows/python-tests.yaml)
+
 # json-server
 
 A simple, JSON-only web server implementation in Python.
