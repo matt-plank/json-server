@@ -17,7 +17,6 @@ def api():
     def item(request: Request) -> Response:
         return Response(
             status=200,
-            headers={},
             json={"message": "This is an item"},
         )
 
@@ -25,7 +24,6 @@ def api():
     def create_item(request: Request) -> Response:
         return Response(
             status=201,
-            headers={},
             json={"message": "Created an item"},
         )
 
@@ -33,7 +31,6 @@ def api():
     def index(request: Request) -> Response:
         return Response(
             status=200,
-            headers={},
             json={"message": "Hello, world!"},
         )
 

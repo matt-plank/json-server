@@ -37,6 +37,5 @@ def prediction(request: Request) -> Response:
 
     return Response(
         status=200,
-        headers={},
         json={"prediction": choice},
     )
