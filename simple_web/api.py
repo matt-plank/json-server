@@ -1,3 +1,4 @@
+import json
 import logging
 import socket
 
@@ -48,7 +49,9 @@ class Api:
 
         logging.info(f"{request.method} {request.path} - {response.status}")
 
-        return f"HTTP/1.1 {response.status}\n\n{response.body}".encode("utf-8")
+        response_body_str: str = json.dumps(response.json)
+
+        return f"HTTP/1.1 {response.status}\n\n{response_body_str}".encode("utf-8")
 
     def handle_request(self, request: Request) -> Response:
         """Handle a request by finding the appropriate request handler from all routers."""

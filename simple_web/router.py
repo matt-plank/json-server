@@ -63,7 +63,7 @@ class Router:
         return Response(
             status=404,
             headers={},
-            body="Not found",
+            json={"message": "Not found"},
         )
 
     def __contains__(self, route: Route) -> bool:

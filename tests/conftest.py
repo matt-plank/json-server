@@ -18,7 +18,7 @@ def api():
         return Response(
             status=200,
             headers={},
-            body="This is an item",
+            json={"message": "This is an item"},
         )
 
     @router.post("/")
@@ -26,7 +26,7 @@ def api():
         return Response(
             status=201,
             headers={},
-            body="Created an item",
+            json={"message": "Created an item"},
         )
 
     @api.get("/")
@@ -34,7 +34,7 @@ def api():
         return Response(
             status=200,
             headers={},
-            body="Hello, world!",
+            json={"message": "Hello, world!"},
         )
 
     api.add_router("/item", router)

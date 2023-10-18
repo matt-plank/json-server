@@ -7,4 +7,4 @@ class Response:
 
     status: int
     headers: dict[str, str]
-    body: str
+    json: dict
