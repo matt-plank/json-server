@@ -1,10 +1,9 @@
+from json_server.api import Api
+from json_server.request import Request
+from json_server.response import Response
+from json_server.router import Router
+from json_server.testing import TestClient
 from pytest import fixture
-
-from simple_web.api import Api
-from simple_web.request import Request
-from simple_web.response import Response
-from simple_web.router import Router
-from simple_web.testing import TestClient
 
 
 @fixture

@@ -3,9 +3,9 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "simple-web"
+name = "json-server"
 version = "0.0.1"
 dependencies = []
 
 [tool.setuptools]
-packages = ["simple_web"]
+packages = ["json_server"]

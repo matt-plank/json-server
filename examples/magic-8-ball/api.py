@@ -1,6 +1,5 @@
+from json_server.api import Api
 from routes import prediction
-
-from simple_web.api import Api
 
 api = Api()
 api.add_router("/prediction", prediction.router)

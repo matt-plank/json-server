@@ -1,4 +1,4 @@
-# simple-web
+# json-server
 
 A simple, JSON-only web server implementation in Python.
 
@@ -7,8 +7,8 @@ A simple, JSON-only web server implementation in Python.
 Clone and enter the repository
 
 ```bash
-$ git clone https://github.com/matt-plank/simple-web.git
-$ cd simple-web
+$ git clone https://github.com/matt-plank/json-server.git
+$ cd json-server
 ```
 
 Install requirements (in a virtual environment of your choice)
@@ -29,9 +29,9 @@ $ pip install -e .  # for development
 We can create a simple API like this:
 
 ```python
-from simple_web.api import Api
-from simple_web.request import Request
-from simple_web.response import Response
+from json_server.api import Api
+from json_server.request import Request
+from json_server.response import Response
 
 api = Api()
 

@@ -1,8 +1,8 @@
 import random
 
-from simple_web.request import Request
-from simple_web.response import Response
-from simple_web.router import Router
+from json_server.request import Request
+from json_server.response import Response
+from json_server.router import Router
 
 CHOICES: list[str] = [
     "It is certain.",
