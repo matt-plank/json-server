@@ -1,9 +1,10 @@
+from pytest import fixture
+
 from json_server.api import Api
 from json_server.request import Request
 from json_server.response import Response
 from json_server.router import Router
 from json_server.testing import TestClient
-from pytest import fixture
 
 
 @fixture
