@@ -55,3 +55,7 @@ class Api:
         response: Response = handler(request)
 
         return response
+
+    def get(self, path: str):
+        """A convenience decorator for adding GET routes to default router."""
+        return self.default_router.get(path)

@@ -10,7 +10,7 @@ from simple_web.testing import TestClient
 def api():
     api = Api()
 
-    @api.default_router.get("/")
+    @api.get("/")
     def index(request: Request) -> Response:
         return Response(
             status=200,
