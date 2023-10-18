@@ -1,6 +1,8 @@
 import logging
 import socket
 
+from .request import from_string
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -28,7 +30,8 @@ class Api:
             logging.info(f"Connection from {address}")
 
             request_data = client_socket.recv(1024)
-            logging.info(f"Request data: {request_data.decode('utf-8')}")
+            request = from_string(request_data.decode("utf-8"))
+            logging.info(f"Request data: {request}")
 
             response_data = "HTTP/1.1 200 OK\n\nHello, World!"
 
