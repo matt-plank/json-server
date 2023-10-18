@@ -1,7 +1,8 @@
 import logging
 import socket
 
-from .request import from_string
+from .request import Request, from_string
+from .response import Response
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,19 +22,31 @@ class Api:
         """Start listening for connections."""
         self.server_socket.bind((host, port))
 
-        logging.info(f"Listening on {host}:{port}")
+        logging.info(f"Running on {host}:{port}")
 
         self.server_socket.listen(1)
 
         while self.running:
             client_socket, address = self.server_socket.accept()
-            logging.info(f"Connection from {address}")
 
-            request_data = client_socket.recv(1024)
-            request = from_string(request_data.decode("utf-8"))
-            logging.info(f"Request data: {request}")
+            request: bytes = client_socket.recv(1024)
+            response: bytes = self.handle_request_bytes(request)
 
-            response_data = "HTTP/1.1 200 OK\n\nHello, World!"
-
-            client_socket.sendall(response_data.encode("utf-8"))
+            client_socket.sendall(response)
             client_socket.close()
+
+    def handle_request_bytes(self, bytes: bytes) -> bytes:
+        request = from_string(bytes.decode("utf-8"))
+        response = self.handle_request(request)
+
+        logging.info(f"{request.method} {request.path} - {response.status}")
+
+        return f"HTTP/1.1 {response.status}\n\n{response.body}".encode("utf-8")
+
+    def handle_request(self, request: Request) -> Response:
+        """Handle a request."""
+        return Response(
+            status=200,
+            headers={},
+            body="Hello, World!",
+        )
