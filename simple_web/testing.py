@@ -22,3 +22,39 @@ class TestClient:
         response = self.api.handle_request(request)
 
         return response
+
+    def put(self, path: str, headers: dict[str, str] = {}) -> Response:
+        """Run a PUT request against the API."""
+        request = Request(
+            method=Method.PUT,
+            path=path,
+            headers=headers,
+        )
+
+        response = self.api.handle_request(request)
+
+        return response
+
+    def post(self, path: str, headers: dict[str, str] = {}) -> Response:
+        """Run a POST request against the API."""
+        request = Request(
+            method=Method.POST,
+            path=path,
+            headers=headers,
+        )
+
+        response = self.api.handle_request(request)
+
+        return response
+
+    def delete(self, path: str, headers: dict[str, str] = {}) -> Response:
+        """Run a DELETE request against the API."""
+        request = Request(
+            method=Method.DELETE,
+            path=path,
+            headers=headers,
+        )
+
+        response = self.api.handle_request(request)
+
+        return response

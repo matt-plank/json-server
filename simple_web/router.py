@@ -31,6 +31,33 @@ class Router:
 
         return decorator
 
+    def put(self, path: str):
+        """Decorator to add a PUT route."""
+
+        def decorator(handler: RequestHandler):
+            self.routes[(path, Method.PUT)] = handler
+            return handler
+
+        return decorator
+
+    def post(self, path: str):
+        """Decorator to add a POST route."""
+
+        def decorator(handler: RequestHandler):
+            self.routes[(path, Method.POST)] = handler
+            return handler
+
+        return decorator
+
+    def delete(self, path: str):
+        """Decorator to add a DELETE route."""
+
+        def decorator(handler: RequestHandler):
+            self.routes[(path, Method.DELETE)] = handler
+            return handler
+
+        return decorator
+
     def response_404(self, request: Request) -> Response:
         """A 404 response handler."""
         return Response(

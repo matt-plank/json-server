@@ -77,3 +77,15 @@ class Api:
     def get(self, path: str):
         """A convenience decorator for adding GET routes to default router."""
         return self.default_router.get(path)
+
+    def put(self, path: str):
+        """A convenience decorator for adding PUT routes to default router."""
+        return self.default_router.put(path)
+
+    def post(self, path: str):
+        """A convenience decorator for adding POST routes to default router."""
+        return self.default_router.post(path)
+
+    def delete(self, path: str):
+        """A convenience decorator for adding DELETE routes to default router."""
+        return self.default_router.delete(path)

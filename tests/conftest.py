@@ -21,6 +21,14 @@ def api():
             body="This is an item",
         )
 
+    @router.post("/")
+    def create_item(request: Request) -> Response:
+        return Response(
+            status=201,
+            headers={},
+            body="Created an item",
+        )
+
     @api.get("/")
     def index(request: Request) -> Response:
         return Response(

@@ -23,3 +23,16 @@ def test_get_router_item_bad_path(client):
     response = client.get("/item")
 
     assert response.status == 404
+
+
+def test_put_on_get_route(client):
+    response = client.put("/")
+
+    assert response.status == 404
+
+
+def test_post(client):
+    response = client.post("/item/")
+
+    assert response.status == 201
+    assert response.body == "Created an item"
