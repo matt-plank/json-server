@@ -4,7 +4,10 @@ import socket
 from .request import Request, from_string
 from .response import Response
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s [%(asctime)s] [%(name)s] %(message)s",
+)
 
 
 class Api:
