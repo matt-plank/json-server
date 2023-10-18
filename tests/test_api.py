@@ -1,5 +1,4 @@
-from simple_web.api import HELLO
+def test_get(client):
+    response = client.get("/")
 
-
-def test_api():
-    assert HELLO == "WORLD"
+    assert response.status == 200
