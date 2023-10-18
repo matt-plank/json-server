@@ -15,10 +15,8 @@ class Router:
         """Initialise router with space for routes."""
         self.routes: dict[Route, RequestHandler] = {}
 
-    def find(self, path: str, method: Method) -> RequestHandler:
+    def find(self, route: Route) -> RequestHandler:
         """Find a route by path and method."""
-        route: Route = (path, method)
-
         if route not in self.routes:
             return self.response_404
 
@@ -34,8 +32,13 @@ class Router:
         return decorator
 
     def response_404(self, request: Request) -> Response:
+        """A 404 response handler."""
         return Response(
             status=404,
             headers={},
             body="Not found",
         )
+
+    def __contains__(self, route: Route) -> bool:
+        """Checks whether a route is in the router."""
+        return route in self.routes

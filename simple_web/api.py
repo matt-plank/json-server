@@ -3,7 +3,7 @@ import socket
 
 from .request import Request, from_string
 from .response import Response
-from .router import RequestHandler, Router
+from .router import RequestHandler, Route, Router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -23,6 +23,7 @@ class Api:
         self.running = True
 
         self.default_router = Router()
+        self.routers: dict[str, Router] = {}
 
     def run(self, host: str, port: int):
         """Start listening for connections."""
@@ -50,11 +51,28 @@ class Api:
         return f"HTTP/1.1 {response.status}\n\n{response.body}".encode("utf-8")
 
     def handle_request(self, request: Request) -> Response:
-        """Handle a request."""
-        handler: RequestHandler = self.default_router.find(request.path, request.method)
-        response: Response = handler(request)
+        """Handle a request by finding the appropriate request handler from all routers."""
+        route: Route = (request.path, request.method)
 
-        return response
+        for path in self.routers:
+            if not request.path.startswith(path):
+                continue
+
+            residual_path: str = request.path[len(path) :]
+            subroute: Route = (residual_path, request.method)
+
+            if subroute not in self.routers[path]:
+                continue
+
+            handler: RequestHandler = self.routers[path].find(subroute)
+            return handler(request)
+
+        handler: RequestHandler = self.default_router.find(route)
+        return handler(request)
+
+    def add_router(self, path: str, router: Router):
+        """Add a router to the API at a certain path."""
+        self.routers[path] = router
 
     def get(self, path: str):
         """A convenience decorator for adding GET routes to default router."""
