@@ -14,7 +14,7 @@ def from_string(request_string: str) -> Request:
     """Parse a request from a string."""
     request_lines = request_string.split("\r\n")
 
-    method, path, _ = request_lines[0].split(" ")
+    route_details = request_lines[0].split(" ")
 
     headers: dict[str, str] = {}
     for header_line in request_lines[1:]:
@@ -28,7 +28,7 @@ def from_string(request_string: str) -> Request:
             raise ValueError(f"Invalid header line: {header_line!r}")
 
     return Request(
-        method=method,
-        path=path,
+        method=route_details[0],
+        path=route_details[1],
         headers=headers,
     )
