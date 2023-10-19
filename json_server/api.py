@@ -28,8 +28,8 @@ class Api:
         self.default_router = Router()
         self.routers: dict[str, Router] = {}
 
-        self.middleware: list[Middleware] = [self.response_from_router]
-        self.add_middleware(json_headers)
+        self.middleware: list[Middleware] = [self.router_response]
+        self.wrap_middleware(json_headers)
 
     def run(self, host: str, port: int):
         """Start listening for connections."""
@@ -43,12 +43,12 @@ class Api:
             client_socket, address = self.server_socket.accept()
 
             request: bytes = client_socket.recv(1024)
-            response: bytes = self.handle_request_bytes(request)
+            response: bytes = self.bytes_response(request)
 
             client_socket.sendall(response)
             client_socket.close()
 
-    def handle_request_bytes(self, bytes: bytes) -> bytes:
+    def bytes_response(self, bytes: bytes) -> bytes:
         """Outermost abstraction of request handling, raw bytes in, raw bytes out."""
         request = from_string(bytes.decode("utf-8"))
         response = self.api_response(request)
@@ -59,7 +59,7 @@ class Api:
 
         return f"HTTP/1.1 {response.status}\n\n{response_body_str}".encode("utf-8")
 
-    def response_from_router(self, request: Request) -> Response:
+    def router_response(self, request: Request) -> Response:
         """Handle a request by finding the appropriate request handler from all routers."""
         route: Route = (request.path, request.method)
 
@@ -87,7 +87,7 @@ class Api:
         """Add a router to the API at a certain path."""
         self.routers[path] = router
 
-    def add_middleware(self, middleware: MiddlewareDefinition) -> None:
+    def wrap_middleware(self, middleware: MiddlewareDefinition) -> None:
         """Add a middleware to the API."""
         outermost_middleware: Middleware = self.middleware[0]
 
