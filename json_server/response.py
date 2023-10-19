@@ -8,3 +8,4 @@ class Response:
     status: int
     json: dict
     headers: dict[str, str] = field(default_factory=dict)
+    body: str = ""

@@ -3,6 +3,7 @@ import logging
 import socket
 
 from .middleware.json_headers import json_headers
+from .middleware.stringify_json import stringify_json
 from .middleware.types import Middleware, MiddlewareDefinition
 from .request import Request, from_string
 from .response import Response
@@ -29,6 +30,7 @@ class Api:
         self.routers: dict[str, Router] = {}
 
         self.middleware: list[Middleware] = [self.router_response]
+        self.wrap_middleware(stringify_json)
         self.wrap_middleware(json_headers)
 
     def run(self, host: str, port: int):
@@ -55,9 +57,7 @@ class Api:
 
         logging.info(f"{request.method} {request.path} - {response.status}")
 
-        response_body_str: str = json.dumps(response.json)
-
-        return f"HTTP/1.1 {response.status}\n\n{response_body_str}".encode("utf-8")
+        return f"HTTP/1.1 {response.status}\n\n{response.body}".encode("utf-8")
 
     def router_response(self, request: Request) -> Response:
         """Handle a request by finding the appropriate request handler from all routers."""
