@@ -3,6 +3,7 @@ def test_get(client):
 
     assert response.status == 200
     assert response.json == {"message": "Hello, world!"}
+    assert response.headers == {"Content-Type": "application/json"}
 
 
 def test_get_bad_path(client):
@@ -10,6 +11,7 @@ def test_get_bad_path(client):
 
     assert response.status == 404
     assert response.json == {"message": "Not found"}
+    assert response.headers == {"Content-Type": "application/json"}
 
 
 def test_get_router_item(client):
@@ -17,6 +19,7 @@ def test_get_router_item(client):
 
     assert response.status == 200
     assert response.json == {"message": "This is an item"}
+    assert response.headers == {"Content-Type": "application/json"}
 
 
 def test_get_router_item_bad_path(client):
@@ -25,6 +28,7 @@ def test_get_router_item_bad_path(client):
 
     assert response.status == 404
     assert response.json == {"message": "Not found"}
+    assert response.headers == {"Content-Type": "application/json"}
 
 
 def test_put_on_get_route(client):
@@ -32,6 +36,7 @@ def test_put_on_get_route(client):
 
     assert response.status == 404
     assert response.json == {"message": "Not found"}
+    assert response.headers == {"Content-Type": "application/json"}
 
 
 def test_post(client):
@@ -39,3 +44,4 @@ def test_post(client):
 
     assert response.status == 201
     assert response.json == {"message": "Created an item"}
+    assert response.headers == {"Content-Type": "application/json"}

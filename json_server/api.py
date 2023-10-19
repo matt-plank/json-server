@@ -2,6 +2,8 @@ import json
 import logging
 import socket
 
+from .middleware.json_headers import json_headers
+from .middleware.types import Middleware, MiddlewareDefinition
 from .request import Request, from_string
 from .response import Response
 from .router import RequestHandler, Route, Router
@@ -26,6 +28,9 @@ class Api:
         self.default_router = Router()
         self.routers: dict[str, Router] = {}
 
+        self.middleware: list[Middleware] = [self.response_from_router]
+        self.add_middleware(json_headers)
+
     def run(self, host: str, port: int):
         """Start listening for connections."""
         self.server_socket.bind((host, port))
@@ -44,8 +49,9 @@ class Api:
             client_socket.close()
 
     def handle_request_bytes(self, bytes: bytes) -> bytes:
+        """Outermost abstraction of request handling, raw bytes in, raw bytes out."""
         request = from_string(bytes.decode("utf-8"))
-        response = self.handle_request(request)
+        response = self.api_response(request)
 
         logging.info(f"{request.method} {request.path} - {response.status}")
 
@@ -53,7 +59,7 @@ class Api:
 
         return f"HTTP/1.1 {response.status}\n\n{response_body_str}".encode("utf-8")
 
-    def handle_request(self, request: Request) -> Response:
+    def response_from_router(self, request: Request) -> Response:
         """Handle a request by finding the appropriate request handler from all routers."""
         route: Route = (request.path, request.method)
 
@@ -73,9 +79,22 @@ class Api:
         handler: RequestHandler = self.default_router.find(route)
         return handler(request)
 
+    def api_response(self, request: Request) -> Response:
+        """The final response from teh API."""
+        return self.middleware[0](request)
+
     def add_router(self, path: str, router: Router):
         """Add a router to the API at a certain path."""
         self.routers[path] = router
+
+    def add_middleware(self, middleware: MiddlewareDefinition) -> None:
+        """Add a middleware to the API."""
+        outermost_middleware: Middleware = self.middleware[0]
+
+        def middleware_function(request: Request) -> Response:
+            return middleware(request, outermost_middleware)
+
+        self.middleware.insert(0, middleware_function)
 
     def get(self, path: str):
         """A convenience decorator for adding GET routes to default router."""

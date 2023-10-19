@@ -19,7 +19,7 @@ class TestClient:
             headers=headers,
         )
 
-        response = self.api.handle_request(request)
+        response = self.api.api_response(request)
 
         return response
 
@@ -31,7 +31,7 @@ class TestClient:
             headers=headers,
         )
 
-        response = self.api.handle_request(request)
+        response = self.api.api_response(request)
 
         return response
 
@@ -43,7 +43,7 @@ class TestClient:
             headers=headers,
         )
 
-        response = self.api.handle_request(request)
+        response = self.api.api_response(request)
 
         return response
 
@@ -55,6 +55,6 @@ class TestClient:
             headers=headers,
         )
 
-        response = self.api.handle_request(request)
+        response = self.api.api_response(request)
 
         return response
