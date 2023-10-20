@@ -2,6 +2,7 @@ import json
 import logging
 import socket
 
+from .middleware import compose
 from .middleware.json_headers import json_headers
 from .middleware.server_error import server_error
 from .middleware.stringify_json import stringify_json
@@ -30,10 +31,12 @@ class Api:
         self.default_router = Router()
         self.routers: dict[str, Router] = {}
 
-        self.middleware: list[Middleware] = [self.router_response]
-        self.wrap_middleware(server_error)
-        self.wrap_middleware(stringify_json)
-        self.wrap_middleware(json_headers)
+        self.middlewares: list[MiddlewareDefinition] = []
+        self.api_response: Middleware = self.router_response
+
+        self.add_middleware(json_headers)
+        self.add_middleware(stringify_json)
+        self.add_middleware(server_error)
 
     def run(self, host: str, port: int):
         """Start listening for connections."""
@@ -81,22 +84,28 @@ class Api:
         handler: RequestHandler = self.default_router.find(route)
         return handler(request)
 
-    def api_response(self, request: Request) -> Response:
-        """The final response from teh API."""
-        return self.middleware[0](request)
-
     def add_router(self, path: str, router: Router):
         """Add a router to the API at a certain path."""
         self.routers[path] = router
 
-    def wrap_middleware(self, middleware: MiddlewareDefinition) -> None:
+    def add_middleware(self, middleware: MiddlewareDefinition) -> None:
         """Add a middleware to the API."""
-        outermost_middleware: Middleware = self.middleware[0]
+        self.middlewares.append(middleware)
+        self.api_response = self.compose_middleware()
 
-        def middleware_function(request: Request) -> Response:
-            return middleware(request, outermost_middleware)
+    def wrap_middleware(self, middleware: MiddlewareDefinition) -> None:
+        """Wrap all exising middlewares with a new middleware."""
+        self.middlewares = [middleware] + self.middlewares
+        self.api_response = self.compose_middleware()
 
-        self.middleware.insert(0, middleware_function)
+    def compose_middleware(self) -> Middleware:
+        """Run through tracked middlewares and compose them into a single function."""
+        response_function: Middleware = self.router_response
+
+        for middleware in reversed(self.middlewares):
+            response_function = compose.from_definition(middleware, response_function)
+
+        return response_function
 
     def get(self, path: str):
         """A convenience decorator for adding GET routes to default router."""
