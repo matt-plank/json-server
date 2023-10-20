@@ -1,10 +1,9 @@
 from typing import Callable
 
-from .methods import Method
 from .request import Request
 from .response import Response
 
-Route = tuple[str, Method]
+Route = tuple[str, str]
 RequestHandler = Callable[[Request], Response]
 
 
@@ -26,7 +25,7 @@ class Router:
         """Decorator to add a GET route."""
 
         def decorator(handler: RequestHandler):
-            self.routes[(path, Method.GET)] = handler
+            self.routes[(path, "GET")] = handler
             return handler
 
         return decorator
@@ -35,7 +34,7 @@ class Router:
         """Decorator to add a PUT route."""
 
         def decorator(handler: RequestHandler):
-            self.routes[(path, Method.PUT)] = handler
+            self.routes[(path, "PUT")] = handler
             return handler
 
         return decorator
@@ -44,7 +43,7 @@ class Router:
         """Decorator to add a POST route."""
 
         def decorator(handler: RequestHandler):
-            self.routes[(path, Method.POST)] = handler
+            self.routes[(path, "POST")] = handler
             return handler
 
         return decorator
@@ -53,7 +52,7 @@ class Router:
         """Decorator to add a DELETE route."""
 
         def decorator(handler: RequestHandler):
-            self.routes[(path, Method.DELETE)] = handler
+            self.routes[(path, "DELETE")] = handler
             return handler
 
         return decorator

@@ -1,5 +1,4 @@
 from .api import Api
-from .methods import Method
 from .request import Request
 from .response import Response
 
@@ -14,7 +13,7 @@ class TestClient:
     def get(self, path: str, headers: dict[str, str] = {}) -> Response:
         """Run a GET request against the API."""
         request = Request(
-            method=Method.GET,
+            method="GET",
             path=path,
             headers=headers,
         )
@@ -26,7 +25,7 @@ class TestClient:
     def put(self, path: str, headers: dict[str, str] = {}) -> Response:
         """Run a PUT request against the API."""
         request = Request(
-            method=Method.PUT,
+            method="PUT",
             path=path,
             headers=headers,
         )
@@ -38,7 +37,7 @@ class TestClient:
     def post(self, path: str, headers: dict[str, str] = {}) -> Response:
         """Run a POST request against the API."""
         request = Request(
-            method=Method.POST,
+            method="POST",
             path=path,
             headers=headers,
         )
@@ -50,7 +49,7 @@ class TestClient:
     def delete(self, path: str, headers: dict[str, str] = {}) -> Response:
         """Run a DELETE request against the API."""
         request = Request(
-            method=Method.DELETE,
+            method="DELETE",
             path=path,
             headers=headers,
         )
