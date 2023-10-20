@@ -40,10 +40,44 @@ def exception_router():
 
 
 @fixture
-def api(item_router, exception_router):
+def endpoint_headers_middleware():
+    """Add a test header to developer-defined responses."""
+
+    def middleware(request: Request, next_middleware) -> Response:
+        response = next_middleware(request)
+        response.headers["X-Test-Header"] = "Test header"
+
+        return response
+
+    return middleware
+
+
+@fixture
+def all_responses_headers_middleware():
+    """Add a test header to all responses."""
+
+    def middleware(request: Request, next_middleware) -> Response:
+        response = next_middleware(request)
+        response.headers["X-All-Test-Header"] = "Test header"
+
+        return response
+
+    return middleware
+
+
+@fixture
+def api(
+    item_router,
+    exception_router,
+    endpoint_headers_middleware,
+    all_responses_headers_middleware,
+):
     api = Api()
     api.add_router("/item", item_router)
     api.add_router("/exception", exception_router)
+
+    api.wrap_middleware(all_responses_headers_middleware)
+    api.add_middleware(endpoint_headers_middleware)
 
     @api.get("/")
     def index(request: Request) -> Response:
