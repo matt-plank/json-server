@@ -34,6 +34,10 @@ def api():
             json={"message": "Hello, world!"},
         )
 
+    @api.get("/exception")
+    def raise_exception(request: Request) -> Response:
+        raise Exception("This is an exception")
+
     api.add_router("/item", router)
 
     return api

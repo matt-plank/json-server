@@ -3,6 +3,7 @@ import logging
 import socket
 
 from .middleware.json_headers import json_headers
+from .middleware.server_error import server_error
 from .middleware.stringify_json import stringify_json
 from .middleware.types import Middleware, MiddlewareDefinition
 from .request import Request, from_string
@@ -30,6 +31,7 @@ class Api:
         self.routers: dict[str, Router] = {}
 
         self.middleware: list[Middleware] = [self.router_response]
+        self.wrap_middleware(server_error)
         self.wrap_middleware(stringify_json)
         self.wrap_middleware(json_headers)
 

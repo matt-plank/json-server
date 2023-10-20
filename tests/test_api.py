@@ -45,3 +45,11 @@ def test_post(client):
     assert response.status == 201
     assert response.json == {"message": "Created an item"}
     assert response.headers == {"Content-Type": "application/json"}
+
+
+def test_exception(client):
+    response = client.get("/exception")
+
+    assert response.status == 500
+    assert response.json == {"message": "Internal server error"}
+    assert response.headers == {"Content-Type": "application/json"}
