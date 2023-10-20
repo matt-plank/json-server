@@ -48,7 +48,7 @@ def test_post(client):
 
 
 def test_exception(client):
-    response = client.get("/exception")
+    response = client.get("/exception/")
 
     assert response.status == 500
     assert response.json == {"message": "Internal server error"}

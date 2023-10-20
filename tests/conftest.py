@@ -8,9 +8,7 @@ from json_server.testing import TestClient
 
 
 @fixture
-def api():
-    api = Api()
-
+def item_router():
     router = Router()
 
     @router.get("/")
@@ -27,18 +25,32 @@ def api():
             json={"message": "Created an item"},
         )
 
+    return router
+
+
+@fixture
+def exception_router():
+    router = Router()
+
+    @router.get("/")
+    def raise_exception(request: Request) -> Response:
+        raise Exception("This is an exception")
+
+    return router
+
+
+@fixture
+def api(item_router, exception_router):
+    api = Api()
+    api.add_router("/item", item_router)
+    api.add_router("/exception", exception_router)
+
     @api.get("/")
     def index(request: Request) -> Response:
         return Response(
             status=200,
             json={"message": "Hello, world!"},
         )
-
-    @api.get("/exception")
-    def raise_exception(request: Request) -> Response:
-        raise Exception("This is an exception")
-
-    api.add_router("/item", router)
 
     return api
 
