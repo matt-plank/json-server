@@ -1,6 +1,7 @@
 from pytest import fixture
 
 from json_server.api import Api
+from json_server.exceptions import HTTPError
 from json_server.request import Request
 from json_server.response import Response
 from json_server.router import Router
@@ -32,9 +33,16 @@ def item_router():
 def exception_router():
     router = Router()
 
-    @router.get("/")
+    @router.get("/default")
     def raise_exception(request: Request) -> Response:
         raise Exception("This is an exception")
+
+    @router.get("/http")
+    def raise_http_exception(request: Request) -> Response:
+        raise HTTPError(
+            status_code=400,
+            message="You did this on purpose",
+        )
 
     return router
 

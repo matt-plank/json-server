@@ -1,8 +1,8 @@
-import json
 import logging
 import socket
 
 from .middleware import compose
+from .middleware.handle_http_error import handle_http_error
 from .middleware.json_headers import json_headers
 from .middleware.server_error import server_error
 from .middleware.stringify_json import stringify_json
@@ -37,6 +37,7 @@ class Api:
         self.add_middleware(json_headers)
         self.add_middleware(stringify_json)
         self.add_middleware(server_error)
+        self.add_middleware(handle_http_error)
 
     def run(self, host: str, port: int):
         """Start listening for connections."""

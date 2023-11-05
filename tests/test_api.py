@@ -72,10 +72,21 @@ def test_post(client):
 
 
 def test_exception(client):
-    response = client.get("/exception/")
+    response = client.get("/exception/default")
 
     assert response.status == 500
     assert response.json == {"message": "Internal server error"}
+    assert response.headers == {
+        "Content-Type": "application/json",
+        "X-All-Test-Header": "Test header",
+    }
+
+
+def test_http_exception(client):
+    response = client.get("/exception/http")
+
+    assert response.status == 400
+    assert response.json == {"message": "You did this on purpose"}
     assert response.headers == {
         "Content-Type": "application/json",
         "X-All-Test-Header": "Test header",
